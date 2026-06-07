@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 interface RowDetailModalProps {
   open: boolean;
@@ -33,7 +34,10 @@ export default function RowDetailModal({
 
   if (!open) return null;
 
-  return (
+  // Render via portal to escape any parent stacking context / overflow
+  // constraints. This ensures the modal can correctly cover the full viewport
+  // even when launched from inside another modal.
+  return createPortal(
     <div
       className="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-6"
       role="dialog"
@@ -148,6 +152,7 @@ export default function RowDetailModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
