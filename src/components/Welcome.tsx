@@ -32,13 +32,13 @@ export default function Welcome() {
             {/* Top decorative bar */}
             <div className="flex items-center gap-2 mb-4 sm:mb-6">
               <div className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-amber-500 animate-pulse"></div>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-400">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-amber-700 dark:text-amber-400">
                 Industrial Dashboard
               </span>
             </div>
 
             {/* Heading */}
-            <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
               Welcome to{" "}
               <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 dark:from-amber-400 dark:via-amber-500 dark:to-amber-600 bg-clip-text text-transparent">
                 Ultra Aluminum
@@ -46,7 +46,7 @@ export default function Welcome() {
             </h1>
 
             {/* Description */}
-            <p className="mt-4 sm:mt-6 text-sm sm:text-xl text-slate-700 dark:text-slate-300 leading-relaxed">
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-slate-700 dark:text-slate-300 leading-relaxed">
               Securely manage and monitor our manufacturing ecosystem. Access real-time
               inventory levels, production timelines, and comprehensive quality control
               reports through our central industrial database.
@@ -63,7 +63,7 @@ export default function Welcome() {
                   key={item.label}
                   className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/50 dark:border-slate-700/50 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 shadow-sm"
                 >
-                  <span className="text-sm sm:text-base">{item.icon}</span>
+                  <span className="text-base sm:text-lg">{item.icon}</span>
                   <span>{item.label}</span>
                 </div>
               ))}

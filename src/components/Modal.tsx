@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from "react";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
 interface ModalProps {
   open: boolean;
@@ -17,13 +18,11 @@ export default function Modal({ open, onClose, title, color, section, children }
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKey);
-    // Lock body scroll
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "";
-    };
+    return () => window.removeEventListener("keydown", handleKey);
   }, [open, onClose]);
+
+  // Lock body scroll (ref-counted so it composes with nested modals)
+  useBodyScrollLock(open);
 
   if (!open) return null;
 
@@ -40,9 +39,9 @@ export default function Modal({ open, onClose, title, color, section, children }
         onClick={onClose}
       ></div>
 
-      {/* Modal Card */}
+      {/* Modal Card — sized to content; the body is the scroll region */}
       <div
-        className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/40 dark:border-slate-700/40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl backdrop-saturate-150 shadow-2xl shadow-slate-900/30 dark:shadow-black/60 animate-[modalIn_300ms_cubic-bezier(0.34,1.56,0.64,1)]"
+        className="relative w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl border border-white/40 dark:border-slate-700/40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl backdrop-saturate-150 shadow-2xl shadow-slate-900/30 dark:shadow-black/60 animate-[modalIn_300ms_cubic-bezier(0.34,1.56,0.64,1)]"
       >
         {/* Inner highlight ring */}
         <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/30 dark:ring-slate-700/30 pointer-events-none"></div>
@@ -68,12 +67,12 @@ export default function Modal({ open, onClose, title, color, section, children }
               </svg>
             </div>
             <div className="min-w-0">
-              <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+              <div className="text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
                 {section}
               </div>
               <h2
                 id="modal-title"
-                className="mt-0.5 text-lg sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white truncate"
+                className="mt-0.5 text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 dark:text-white truncate"
               >
                 {title}
               </h2>
@@ -92,11 +91,11 @@ export default function Modal({ open, onClose, title, color, section, children }
           </button>
         </div>
 
-        {/* Body */}
-        <div className="px-5 sm:px-6 pb-5 sm:pb-6">
+        {/* Body — scrollable region. Header above is sticky, this scrolls. */}
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 sm:px-6 pb-5 sm:pb-6">
           {children ?? (
             <div className="space-y-4">
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                 You opened the <span className="font-semibold" style={{ color }}>{title}</span> module
                 under <span className="font-semibold">{section}</span>. This is where the detailed
                 form, data table, or action panel for this module will appear.
@@ -113,10 +112,10 @@ export default function Modal({ open, onClose, title, color, section, children }
                     key={stat.label}
                     className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 p-3 text-center"
                   >
-                    <div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+                    <div className="text-xs sm:text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
                       {stat.label}
                     </div>
-                    <div className="mt-1 text-sm font-bold text-slate-900 dark:text-white">{stat.value}</div>
+                    <div className="mt-1 text-base sm:text-lg font-bold text-slate-900 dark:text-white">{stat.value}</div>
                   </div>
                 ))}
               </div>
@@ -124,7 +123,7 @@ export default function Modal({ open, onClose, title, color, section, children }
               {/* Action row */}
               <div className="flex flex-wrap gap-2 pt-2">
                 <button
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:scale-[1.02] active:scale-95"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-base font-semibold text-white shadow-md transition-all hover:scale-[1.02] active:scale-95"
                   style={{
                     background: `linear-gradient(135deg, ${color}, ${color}cc)`,
                     boxShadow: `0 4px 12px ${color}55`,
@@ -137,7 +136,7 @@ export default function Modal({ open, onClose, title, color, section, children }
                 </button>
                 <button
                   onClick={onClose}
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 px-4 py-2.5 text-base font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >
                   Close
                 </button>

@@ -314,9 +314,9 @@ export default function PackingTable({ category, color, title, showBucket = true
   const numCols = showBucket ? 36 : 35;
 
   return (
-    <div className="space-y-3">
-      {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <div className="flex flex-col h-full gap-3">
+      {/* Header bar — stays fixed at the top while the table area scrolls */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 flex-shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
             {title} Records
@@ -357,6 +357,7 @@ export default function PackingTable({ category, color, title, showBucket = true
             endDate={endDate}
             onChange={setDateRange}
             color={color}
+            dataDates={rows.map((r) => r.packingDate).filter(Boolean)}
           />
           <ExportButton
             filename={category === "anodizing_pack" ? "anodizing_packing" : "powdercoat_packing"}
@@ -445,8 +446,8 @@ export default function PackingTable({ category, color, title, showBucket = true
         <span className="text-slate-500 dark:text-slate-400">= Weight Bar</span>
       </div>
 
-      {/* Table — grouped by section for readability */}
-      <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/40 backdrop-blur-sm">
+      {/* Table — grouped by section for readability. Only region that scrolls. */}
+      <div className="table-scroll-area rounded-lg border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/40 backdrop-blur-sm flex-shrink-0">
         <table className="min-w-full text-[10px] sm:text-xs">
           <thead>
             <tr

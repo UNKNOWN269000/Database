@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
 interface RowDetailModalProps {
   open: boolean;
@@ -32,16 +33,30 @@ export default function RowDetailModal({
     return () => window.removeEventListener("keydown", handleKey);
   }, [open, onClose]);
 
+  // Lock body scroll (ref-counted so it composes with the parent modal)
+  useBodyScrollLock(open);
+
   if (!open) return null;
 
   // Render via portal to escape any parent stacking context / overflow
   // constraints. This ensures the modal can correctly cover the full viewport
   // even when launched from inside another modal.
+  //
+  // We also stop wheel/touch events from bubbling to the parent modal,
+  // so scrolling inside the detail modal does NOT scroll the table
+  // behind it. Combined with the ref-counted body lock, only the
+  // detail modal scrolls while it is open.
+  const stopScrollPropagation = (e: React.WheelEvent | React.TouchEvent) => {
+    e.stopPropagation();
+  };
+
   return createPortal(
     <div
       className="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-6"
       role="dialog"
       aria-modal="true"
+      onWheel={stopScrollPropagation}
+      onTouchMove={stopScrollPropagation}
     >
       {/* Backdrop */}
       <div

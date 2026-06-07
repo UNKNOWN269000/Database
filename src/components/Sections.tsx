@@ -166,7 +166,7 @@ function HoverFillButton({ label, color, accent, isActive, onClick, onOpenModal 
         updatePosFromEvent(e as unknown as MouseEvent<HTMLButtonElement>);
       }}
       onMouseLeave={() => setHovered(false)}
-      className={`group/btn relative w-full flex items-center justify-between gap-3 rounded-xl border ${a.border} bg-white/40 dark:bg-slate-800/40 backdrop-blur-md px-4 py-3 sm:px-5 sm:py-3.5 text-left text-sm sm:text-base font-medium text-slate-800 dark:text-slate-100 overflow-hidden transition-all duration-200 ${
+      className={`group/btn relative w-full flex items-center justify-between gap-3 rounded-xl border ${a.border} bg-white/40 dark:bg-slate-800/40 backdrop-blur-md px-4 py-3.5 sm:px-5 sm:py-3.5 text-left text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 overflow-hidden transition-all duration-200 ${
         isActive ? "ring-2 ring-amber-500/50" : ""
       }`}
     >
@@ -257,11 +257,11 @@ export default function Sections() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className={`h-1.5 w-1.5 rounded-full ${accent.dot}`}></span>
-                      <h2 className={`text-lg sm:text-2xl font-bold tracking-tight ${accent.text}`}>
+                      <h2 className={`text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight ${accent.text}`}>
                         {section.title}
                       </h2>
                     </div>
-                    <p className="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                    <p className="mt-0.5 text-sm sm:text-base text-slate-500 dark:text-slate-400">
                       {section.buttons.length} module{section.buttons.length === 1 ? "" : "s"} available
                     </p>
                   </div>
